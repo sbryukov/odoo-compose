@@ -1,34 +1,24 @@
 version: '3'
 services:
-  odoo:
-    image: junari/odoo
+  web:
+    image: odoo
     depends_on:
-      - mydb
+      - db
     ports:
       - "8069:8069"
-    environment:
-    - HOST=mydb
-    - USER=odoo
-    - PASSWORD=myodoo
-    
-    - DB_USER=odoo
-    - DB_PORT=5432
-    - DB_HOST=mydb
-    - DB_PASSWORD=myodoo
-    
     volumes:
-      - ./odoo.conf:/etc/odoo/odoo.conf
-      - ./data/odoo-data:/opt/odoo/data
-      - .remote-vscode:/opt/odoo/.vscode
-      - ./src/custom-addons:/opt/odoo/custom_addons:rw
-      - ./src/home:/home/odoo:rw
-      
-  mydb:
+      - odoo-web-data:/var/lib/odoo
+      - ./config:/etc/odoo
+      - ./addons:/mnt/extra-addons
+  db:
     image: postgres:10
     environment:
       - POSTGRES_DB=postgres
-      - POSTGRES_PASSWORD=myodoo
+      - POSTGRES_PASSWORD=odoo
       - POSTGRES_USER=odoo
+      - PGDATA=/var/lib/postgresql/data/pgdata
     volumes:
-      - ./data/postgres:/var/lib/postgresql/data
-
+      - odoo-db-data:/var/lib/postgresql/data/pgdata
+volumes:
+  odoo-web-data:
+  odoo-db-data:
