@@ -12,13 +12,16 @@ services:
       - ./addons:/mnt/extra-addons
   db:
     image: postgres:10
+    container_name: odoo_db
+    ports:
+      - "54321:5432"
     environment:
-      - POSTGRES_DB=postgres
+      - POSTGRES_DB=odoo
       - POSTGRES_PASSWORD=odoo
       - POSTGRES_USER=odoo
-      - PGDATA=/var/lib/postgresql/data/pgdata
     volumes:
-      - odoo-db-data:/var/lib/postgresql/data/pgdata
+      - ./data/postgres:/var/lib/postgresql/data
 volumes:
-  odoo-web-data:
-  odoo-db-data:
+   odoo-web-data:
+   odoo-db-data:
+
